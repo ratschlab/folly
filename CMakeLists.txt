@@ -382,6 +382,11 @@ source_group("folly" FILES ${CMAKE_CURRENT_BINARY_DIR}/folly/folly-config.h)
 
 # Generate pkg-config variables from folly_deps before we add our own
 # build/install-time include directory generator expressions
+if (FOLLY_USE_JEMALLOC)
+  # Consumers may include jemalloc before a Folly header.
+  target_compile_definitions(folly_deps INTERFACE JEMALLOC_NO_DEMANGLE)
+endif ()
+
 include(GenPkgConfig)
 gen_pkgconfig_vars(FOLLY_PKGCONFIG folly_deps)
 
